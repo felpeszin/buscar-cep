@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Consulta de CEP</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $("#btnBuscar").click(function() {
+                var cep = $("#cepInput").val().replace(/\D/g, ''); // Remove caracteres não numéricos do CEP
+
+                if (cep !== '') {
+                    $.getJSON("https://viacep.com.br/ws/" + cep + "/json/", function(data) {
+                        if (!("erro" in data)) {
+                            $("#logradouro").text(data.logradouro);
+                            $("#bairro").text(data.bairro);
+                            $("#cidade").text(data.localidade);
+                            $("#estado").text(data.uf);
+                        } else {
+                            alert("CEP não encontrado.");
+                        }
+                    }).fail(function() {
+                        alert("Erro ao consultar o CEP.");
+                    });
+                } else {
+                    alert("Por favor, informe um CEP válido.");
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+    <h2>Consulta de CEP</h2>
+    <label for="cepInput">CEP:</label>
+    <input type="text" id="cepInput" placeholder="Digite o CEP" />
+    <button id="btnBuscar">Buscar</button>
+    <br /><br />
+    <label for="logradouro">Logradouro:</label>
+    <span id="logradouro"></span>
+    <br />
+    <label for="bairro">Bairro:</label>
+    <span id="bairro"></span>
+    <br />
+    <label for="cidade">Cidade:</label>
+    <span id="cidade"></span>
+    <br />
+    <label for="estado">Estado:</label>
+    <span id="estado"></span>
+</body>
+</html>
